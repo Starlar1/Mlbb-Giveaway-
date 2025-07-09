@@ -1,0 +1,1561 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Diamond 11 Giveaway</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+    :root {
+        --primary: #2563eb;
+        --primary-light: #3b82f6;
+        --secondary: #7c3aed;
+        --accent: #a855f7;
+        --dark: #1e293b;
+        --light: #f8fafc;
+        --sidebar: #1e293b;
+        --error: #ef4444;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --text-primary: #1e293b;
+        --text-secondary: #64748b;
+        --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+        --glass: rgba(255, 255, 255, 0.1);
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        --radius-sm: 0.25rem;
+        --radius: 0.5rem;
+        --radius-md: 0.75rem;
+        --radius-lg: 1rem;
+        --radius-xl: 1.5rem;
+        --radius-full: 9999px;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+        font-family: 'Pyidaungsu', 'Noto Sans Myanmar', 'Segoe UI', system-ui, sans-serif;
+        color: var(--text-primary);
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+        background-color: var(--light);
+        line-height: 1.5;
+    }
+
+    /* Smooth scroll behavior */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* VPN Check Screen */
+    #vpnCheckScreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 2rem;
+        animation: fadeIn 0.5s ease-out;
+        backdrop-filter: blur(10px);
+    }
+
+    #vpnCheckScreen h2 {
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    #vpnCheckScreen p {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        max-width: 500px;
+        opacity: 0.9;
+    }
+
+    #checkVpnBtn {
+        padding: 0.75rem 2rem;
+        background-color: white;
+        color: var(--primary);
+        border: none;
+        border-radius: var(--radius-full);
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 1rem;
+        margin-top: 1.5rem;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-md);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    #checkVpnBtn:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    #checkVpnBtn i {
+        font-size: 1.1rem;
+    }
+
+    /* Sidebar Design */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -300px;
+        width: 300px;
+        height: 100vh;
+        background-color: var(--sidebar);
+        color: white;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1000;
+        box-shadow: var(--shadow-xl);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .sidebar.active {
+        left: 0;
+    }
+
+    .sidebar-header {
+        padding: 1.5rem;
+        background-color: rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .sidebar-header h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .sidebar-header img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .sidebar-menu {
+        flex: 1;
+        padding: 0.5rem 0;
+        overflow-y: auto;
+    }
+
+    .sidebar-item {
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin: 0 0.5rem;
+        border-radius: var(--radius);
+    }
+
+    .sidebar-item:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: translateX(5px);
+    }
+
+    .sidebar-item.active {
+        background-color: var(--primary);
+    }
+
+    .sidebar-icon {
+        font-size: 1.1rem;
+        width: 24px;
+        text-align: center;
+        color: var(--accent);
+    }
+
+    .sidebar-label {
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .sidebar-footer {
+        padding: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: center;
+        font-size: 0.8rem;
+        opacity: 0.7;
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        display: none;
+        backdrop-filter: blur(5px);
+        transition: all 0.3s;
+    }
+
+    /* Menu Button */
+    .menu-btn {
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        background-color: white;
+        color: var(--primary);
+        width: 48px;
+        height: 48px;
+        border-radius: var(--radius-full);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        cursor: pointer;
+        z-index: 100;
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+    }
+
+    .menu-btn:hover {
+        transform: scale(1.1);
+        box-shadow: var(--shadow-lg);
+    }
+
+    /* Token Display */
+    .token-display {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        background: white;
+        border-radius: var(--radius-full);
+        padding: 0.5rem 1rem;
+        box-shadow: var(--shadow-md);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        z-index: 100;
+        transition: all 0.3s ease;
+    }
+
+    .token-display:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .token-icon {
+        color: #f59e0b;
+        font-size: 1.1rem;
+    }
+
+    .token-count {
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+
+    /* Main Content */
+    .container {
+        max-width: 100%;
+        padding: 1.5rem;
+        padding-top: 5rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .container.sidebar-open {
+        transform: translateX(300px);
+    }
+
+    .card {
+        background: white;
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-xl);
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        padding: 2rem 1.5rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        animation: rotate 15s linear infinite;
+    }
+
+    .diamond-icon {
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+        color: white;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        position: relative;
+        animation: pulse 2s infinite ease-in-out, float 6s infinite ease-in-out;
+    }
+
+    .card-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+
+    .card-subtitle {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        position: relative;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .prize-info {
+        background-color: var(--light);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .prize-info::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+
+    .prize-text {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+.highlight {
+    padding: 0.2rem 0.4rem;
+    border-radius: var(--radius-sm);
+}
+    .progress-container {
+        width: 100%;
+        margin: 1.5rem 0;
+    }
+
+    .progress-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+    }
+
+    .progress-percent {
+        font-weight: 600;
+        color: var(--primary);
+    }
+
+    .progress-bar {
+        height: 12px;
+        background-color: #e2e8f0;
+        border-radius: var(--radius-full);
+        overflow: hidden;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        border-radius: var(--radius-full);
+        width: 0%;
+        transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .progress-fill::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.3) 100%);
+        animation: shimmer 2s infinite linear;
+    }
+
+    .online-count {
+        text-align: center;
+        margin: 1.5rem 0;
+        font-size: 1rem;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .online-dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background-color: var(--success);
+        border-radius: var(--radius-full);
+        animation: pulse 1.5s infinite;
+    }
+
+    .recent-users-container {
+        max-height: 250px;
+        overflow-y: auto;
+        margin: 1.5rem 0;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        border-radius: var(--radius-lg);
+        background-color: var(--light);
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary) var(--light);
+    }
+
+    .recent-users-container::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .recent-users-container::-webkit-scrollbar-track {
+        background: var(--light);
+        border-radius: var(--radius-full);
+    }
+
+    .recent-users-container::-webkit-scrollbar-thumb {
+        background-color: var(--primary);
+        border-radius: var(--radius-full);
+    }
+
+    .recent-user {
+        padding: 1rem 1.25rem;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        transition: all 0.2s;
+    }
+
+    .recent-user:hover {
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    .recent-user:last-child {
+        border-bottom: none;
+    }
+
+    .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--radius-full);
+        background-color: var(--primary);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        flex-shrink: 0;
+    }
+
+    .user-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .username {
+        font-weight: 600;
+        color: var(--text-primary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .user-action {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+    }
+
+    .timestamp {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        white-space: nowrap;
+        margin-left: auto;
+    }
+
+    .action-btn {
+        width: 100%;
+        padding: 1rem;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        border: none;
+        border-radius: var(--radius-lg);
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 1rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .action-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: all 0.6s ease;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+    }
+
+    .action-btn:hover::before {
+        left: 100%;
+    }
+
+    .action-btn:active {
+        transform: translateY(0);
+    }
+
+    .action-btn:disabled {
+        background: #e2e8f0;
+        color: #94a3b8;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .action-btn:disabled:hover::before {
+        left: -100%;
+    }
+
+    .btn-icon {
+        font-size: 1.1rem;
+    }
+
+    .card-footer {
+        text-align: center;
+        padding: 1rem;
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .footer-icon {
+        color: var(--accent);
+        font-size: 1rem;
+    }
+
+    /* Modal Windows */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 2000;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(5px);
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    .modal-content {
+        background-color: white;
+        border-radius: var(--radius-xl);
+        width: 90%;
+        max-width: 400px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow-xl);
+        animation: modalFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-origin: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .modal-content::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+
+    .modal-header {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--primary);
+        text-align: center;
+        position: relative;
+    }
+
+    .modal-body {
+        margin-bottom: 1.5rem;
+    }
+
+    .modal-body p {
+        margin-bottom: 1rem;
+        color: var(--text-secondary);
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: var(--radius);
+        font-size: 1rem;
+        font-family: inherit;
+        transition: all 0.2s;
+        background-color: var(--light);
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        background-color: white;
+    }
+
+    .form-input::placeholder {
+        color: #94a3b8;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.75rem;
+    }
+
+    .modal-btn {
+        padding: 0.75rem 1.25rem;
+        border-radius: var(--radius);
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s ease;
+        font-size: 0.9rem;
+    }
+
+    .modal-btn-primary {
+        background-color: var(--primary);
+        color: white;
+    }
+
+    .modal-btn-primary:hover {
+        background-color: #1d4ed8;
+        transform: translateY(-1px);
+    }
+
+    .modal-btn-secondary {
+        background-color: #f1f5f9;
+        color: var(--text-primary);
+    }
+
+    .modal-btn-secondary:hover {
+        background-color: #e2e8f0;
+        transform: translateY(-1px);
+    }
+
+    .error-message {
+        color: var(--error);
+        font-size: 0.8rem;
+        margin-top: 0.5rem;
+        display: none;
+    }
+
+    .success-message {
+        color: var(--success);
+        font-size: 0.8rem;
+        margin-top: 0.5rem;
+        display: none;
+        text-align: center;
+    }
+
+    /* Confetti Effect */
+    .confetti {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        background-color: var(--accent);
+        opacity: 0;
+        z-index: 9999;
+        animation: confettiFall 5s linear forwards;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes modalFadeIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    @keyframes confettiFall {
+        0% {
+            transform: translateY(-100vh) rotate(0deg);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(100vh) rotate(360deg);
+            opacity: 0;
+        }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 640px) {
+        .sidebar {
+            width: 280px;
+            left: -280px;
+        }
+
+        .container.sidebar-open {
+            transform: translateX(280px);
+        }
+
+        .card-header {
+            padding: 1.5rem 1rem;
+        }
+
+        .diamond-icon {
+            font-size: 3rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+        }
+
+        .modal-content {
+            width: 95%;
+            padding: 1.25rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .container {
+            padding: 1rem;
+            padding-top: 4.5rem;
+        }
+
+        .menu-btn, .token-display {
+            top: 0.75rem;
+        }
+
+        .menu-btn {
+            width: 42px;
+            height: 42px;
+            font-size: 1.1rem;
+        }
+
+        .token-display {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        .card-body {
+            padding: 1.25rem;
+        }
+
+        .prize-info {
+            padding: 1rem;
+        }
+
+        .action-btn {
+            padding: 0.9rem;
+            font-size: 0.95rem;
+        }
+    }
+
+    /* Special Effects */
+    .sparkle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background-color: white;
+        border-radius: 50%;
+        pointer-events: none;
+        animation: sparkleFade 1s ease-out forwards;
+    }
+
+    @keyframes sparkleFade {
+        0% {
+            transform: scale(0);
+            opacity: 0;
+        }
+        50% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(0);
+            opacity: 0;
+        }
+    }
+    
+/* Task Styling */
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--light);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.task-info h3 {
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.task-info p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.task-reward {
+    color: var(--success) !important;
+    font-weight: 600;
+}
+
+.task-btn {
+    padding: 0.5rem 1rem;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.task-btn:disabled {
+    background-color: #cbd5e1;
+    cursor: not-allowed;
+}
+
+.task-btn:hover:not(:disabled) {
+    background-color: var(--primary-light);
+    transform: translateY(-2px);
+}
+
+</style>
+</head>
+<body>
+<!-- VPN စစ်ဆေးမည့်စခရင် -->
+<div id="vpnCheckScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #2e7d32; color: white; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px;">
+    <h2 style="margin-bottom: 20px;">သတိပြုရန်</h2>
+    <div style="max-width: 500px; margin-bottom: 30px; line-height: 1.6;">
+        <p>မြန်မာနိုင်ငံရဲ့ လက်ရှိအခြေအနေတွေကြောင့် USA VPN အသုံးပြုပြီးမှသာ ၀င်ရောက်နိုင်ပါမည်။</p>
+        <p>VPN ဖွင့်ထားပြီးပါက အောက်ပါခလုတ်ကိုနှိပ်ပါ</p>
+    </div>
+    <button id="checkVpnBtn" style="padding: 12px 30px; background-color: white; color: #2e7d32; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px;">VPN ဖွင့်ပြီးပါပြီ</button>
+</div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3>INFO</h3>
+        </div>
+        <div class="sidebar-menu">
+            <div class="sidebar-item" id="profileBtn">
+                <div class="sidebar-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="sidebar-label">ACC</div>
+            </div>
+            <div class="sidebar-item" id="tasksBtn">
+                <div class="sidebar-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <div class="sidebar-label">Tasks</div>
+            </div>
+
+            <div class="sidebar-item" id="giftCodeBtn">
+                <div class="sidebar-icon">
+                    <i class="fas fa-gift"></i>
+                </div>
+                <div class="sidebar-label">Gift Code</div>
+            </div>
+            <div class="sidebar-item" id="logoutBtn">
+                <div class="sidebar-icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+                <div class="sidebar-label">Log Out</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Overlay -->
+    <div class="overlay"></div>
+    
+    <!-- Menu Button -->
+    <div class="menu-btn">
+        <i class="fas fa-bars"></i>
+    </div>
+    
+    <!-- Token Display -->
+    <div class="token-display">
+        <div class="token-icon">
+            <i class="fas fa-coins"></i>
+        </div>
+        <div class="token-count">0</div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <div class="card">
+<!-- Card Header တွင် အောက်ပါကိုထည့်ပါ -->
+<div class="card-header">
+    <div class="diamond-icon">
+        <i class="fas fa-gem"></i>
+    </div>
+    <h1 class="card-title">Diamond 11 Giveaway</h1>
+    <p class="card-subtitle">သုံးသူများရဲ့စုဆောင်းမှု့ <span id="classLevel">0</span></p>
+</div>
+            
+            <div class="card-body">
+                <div class="prize-info">
+                    <p class="prize-text">
+                        အကြိမ် <span class="highlight">100</span> မြှောက် Token သုံးသူသည် 
+                        <span class="highlight">11 Diamond</span> ရရှိမည်!
+                    </p>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-info">
+                        <span>လက်ရှိ Token အသုံးပြုမှု့</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+                
+                <div class="online-count">
+                    Online - <span id="onlineNumber">0</span>
+                </div>
+                
+                <div class="recent-users-container" id="recentUsersList">
+                    <div class="recent-user">
+                        <span class="user-icon"><i class="fas fa-user-clock"></i></span>
+                        <span>လတ်တလော Token အသုံးပြုမှုများ</span>
+                    </div>
+                    <!-- Recent users will be added here dynamically -->
+                </div>
+                
+                <button class="action-btn" id="useTokenBtn">
+                    <span class="btn-icon"><i class="fas fa-coins"></i></span>
+                    Token သုံးရန်
+                </button>
+            </div>
+            
+            <div class="card-footer">
+                <i class="fas fa-info-circle footer-icon"></i> ကံထူးရှင်ဖြစ်ရန် Token များသုံးပါ
+            </div>
+        </div>
+    </div>
+    
+    <!-- Gift Code Modal -->
+    <div class="modal" id="giftCodeModal">
+        <div class="modal-content">
+            <div class="modal-header">လက်ဆောင်ကုဒ်</div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">လက်ဆောင်ကုဒ် ထည့်ပါ</label>
+                    <input type="text" class="form-input" id="giftCodeInput" placeholder="">
+                    <div class="error-message" id="giftCodeError">လက်ဆောင်ကုဒ် မှားယွင်းနေပါသည်</div>
+                    <div class="success-message" id="giftCodeSuccess">10000 Token ရရှိပါပြီ!</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" id="cancelGiftCode">မလုပ်တော့ပါ</button>
+                <button class="modal-btn modal-btn-primary" id="submitGiftCode">Submit</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Winner Form Modal -->
+    <div class="modal" id="winnerFormModal">
+        <div class="modal-content">
+            <div class="modal-header">အောင်မြင်ပါသည်!</div>
+            <div class="modal-body">
+                <p>ကျေးဇူးပြု၍ သင့် MLBB Game ID နှင့် Server ID ကိုဖြည့်ပါ</p>
+                <div class="form-group">
+                    <label class="form-label">Game ID</label>
+                    <input type="text" class="form-input" id="winnerGameId" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Server ID</label>
+                    <input type="text" class="form-input" id="winnerServerId" placeholder="">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-primary" id="submitWinnerInfo">Submit</button>
+            </div>
+        </div>
+    </div>
+    
+<!-- Task Modal -->
+<div class="modal" id="tasksModal">
+    <div class="modal-content">
+        <div class="modal-header">လုပ်စရာများ</div>
+        <div class="modal-body">
+            <div class="task-list">
+                <!-- Task 1: Join Telegram Channel 1 -->
+                <div class="task-item" data-task="join_telegram1">
+                    <div class="task-info">
+                        <h3>Channel သို့ Join ပါ</h3>
+                        <p>https://t.me/MoontonCompamyMM</p>
+                        <p class="task-reward">3 Token Code ရယူရန် @Starlar1 စီတောင်းပါ</p>
+                    </div>
+                    <button class="task-btn" disabled>Join နှိပ်ပါ</button>
+                </div>
+
+                <!-- Task 2: Join Telegram Channel 2 -->
+                <div class="task-item" data-task="join_telegram2">
+                    <div class="task-info">
+                        <h3>Channel သို့ Join ပါ</h3>
+                        <p>https://t.me/StarlarShop</p>
+                        <p class="task-reward">3 Token Code ရယူရန် @Starlar1 စီတောင်းပါ</p>
+                    </div>
+                    <button class="task-btn" disabled>Join နှိပ်ပါ</button>
+                </div>
+
+                <!-- Task 3: Join Telegram Channel 3 (New) -->
+                <div class="task-item" data-task="join_telegram3">
+                    <div class="task-info">
+                        <h3>Channel သို့ Join ပါ</h3>
+                        <p>https://t.me/lily_diashop</p>
+                        <p class="task-reward">5 Token Code ရယူရန် @lovergirl_Lily စီတောင်းပါ </p>
+                    </div>
+                    <button class="task-btn" disabled>Join နှိပ်ပါ</button>
+                </div>
+
+            
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn modal-btn-secondary" id="closeTasksModal">ပိတ်မည်</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Firebase Configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBBQPwvRFKsyINtlOffglVrj6c85YaDs2w",
+        authDomain: "star-arcade-2.firebaseapp.com",
+        projectId: "star-arcade-2",
+        storageBucket: "star-arcade-2.appspot.com",
+        messagingSenderId: "1008183488511",
+        appId: "1:1008183488511:web:3111a40d9f96044ce4c1ca",
+        measurementId: "G-8K50"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // Initialize Telegram WebApp
+    const tg = window.Telegram.WebApp;
+    let userData = {};
+    
+    // Token Count
+    let tokens = 0;
+    const tokenDisplay = document.querySelector('.token-count');
+    let progress = 0;
+    let isWinner = false;
+    let currentClass = 0; // Global class level
+    
+    // DOM Elements
+    const menuBtn = document.querySelector('.menu-btn');
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.querySelector('.overlay');
+    const container = document.querySelector('.container');
+    
+    const giftCodeBtn = document.getElementById('giftCodeBtn');
+    const giftCodeModal = document.getElementById('giftCodeModal');
+    const cancelGiftCode = document.getElementById('cancelGiftCode');
+    const submitGiftCode = document.getElementById('submitGiftCode');
+    const giftCodeInput = document.getElementById('giftCodeInput');
+    const giftCodeError = document.getElementById('giftCodeError');
+    const giftCodeSuccess = document.getElementById('giftCodeSuccess');
+    
+    const useTokenBtn = document.getElementById('useTokenBtn');
+    const progressFill = document.getElementById('progressFill');
+    const progressPercent = document.getElementById('progressPercent');
+    const onlineNumber = document.getElementById('onlineNumber');
+    const recentUsersList = document.getElementById('recentUsersList');
+    const classLevelDisplay = document.getElementById('classLevel');
+    
+    const winnerFormModal = document.getElementById('winnerFormModal');
+    const submitWinnerInfo = document.getElementById('submitWinnerInfo');
+    
+// VPN စစ်ဆေးခြင်း
+function checkVPN() {
+    // VPN စစ်ဆေးတဲ့ logic ကိုဒီမှာထည့်ပါ
+    // ဥပမာ - USA IP ကနေလာတာကိုစစ်တာ
+    
+    // ယာယီအနေနဲ့ button နှိပ်ရင် ဖြတ်သွားအောင်လုပ်ထားတယ်
+    // တကယ့် project မှာ IP စစ်တဲ့ API သုံးသင့်တယ်
+    return true;
+}
+
+// VPN Check Screen အတွက် Event Listener
+document.getElementById('checkVpnBtn').addEventListener('click', function() {
+    if(checkVPN()) {
+        document.getElementById('vpnCheckScreen').style.display = 'none';
+    } else {
+        alert('VPN မဖွင့်ရသေးပါ။ USA VPN ဖွင့်ပြီးမှ ထပ်ကြိုးစားပါ။');
+    }
+});
+
+    // App initialization
+    function initApp() {
+        tg.expand();
+        
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            userData = {
+                id: tg.initDataUnsafe.user.id,
+                firstName: tg.initDataUnsafe.user.first_name,
+                lastName: tg.initDataUnsafe.user.last_name || '',
+                username: tg.initDataUnsafe.user.username || `user_${tg.initDataUnsafe.user.id}`,
+                languageCode: tg.initDataUnsafe.user.language_code || 'en'
+            };
+            
+            document.getElementById('profileBtn').querySelector('.sidebar-label').textContent = userData.username;
+            checkUserBalance();
+        } else {
+            userData = {
+                id: 'test_' + Math.floor(Math.random() * 10000),
+                firstName: 'Test',
+                lastName: 'User',
+                username: 'test_user',
+                languageCode: 'en'
+            };
+            
+            tokens = 10;
+            tokenDisplay.textContent = tokens;
+        }
+        
+        setupRealtimeListeners();
+        initEvents();
+    }
+    
+    // Check user balance
+    function checkUserBalance() {
+        const userRef = database.ref('users/' + userData.id);
+
+        userRef.once('value').then((snapshot) => {
+            if (snapshot.exists()) {
+                tokens = snapshot.val().tokens || 0;
+                tokenDisplay.textContent = tokens;
+            } else {
+                database.ref('globalClassLevel').once('value').then((levelSnap) => {
+                    const globalLevel = levelSnap.val() || 0;
+                    currentClass = globalLevel;
+
+                    tokens = 0;
+                    tokenDisplay.textContent = tokens;
+
+                    userRef.set({
+                        username: userData.username,
+                        firstName: userData.firstName,
+                        lastName: userData.lastName,
+                        tokens: tokens,
+                        class: globalLevel,
+                        lastActive: firebase.database.ServerValue.TIMESTAMP
+                    });
+                });
+            }
+        });
+    }
+
+    // Format timestamp
+    function formatTimestamp(timestamp) {
+        const now = new Date();
+        const date = new Date(timestamp);
+        const diff = Math.floor((now - date) / 1000);
+        
+        if (diff < 60) return `ယခုလေးတင်`;
+        if (diff < 3600) return `${Math.floor(diff / 60)} မိနစ် အကြာက`;
+        if (diff < 86400) return `${Math.floor(diff / 3600)} နာရီ အကြာက`;
+        return `${Math.floor(diff / 86400)} ရက် အကြာက`;
+    }
+    
+    // Setup realtime listeners
+    function setupRealtimeListeners() {
+        // Online users count
+        database.ref('onlineUsers').on('value', (snapshot) => {
+            onlineNumber.textContent = snapshot.numChildren();
+        });
+        
+        // Mark user as online
+        const userOnlineRef = database.ref('onlineUsers/' + userData.id);
+        userOnlineRef.set(true);
+        userOnlineRef.onDisconnect().remove();
+        
+        // Recent activity
+        database.ref('recentActivity').limitToLast(10).on('value', (snapshot) => {
+            const activities = [];
+            snapshot.forEach((childSnapshot) => {
+                activities.push(childSnapshot.val());
+            });
+            
+            recentUsersList.innerHTML = `
+                <div class="recent-user">
+                    <span class="user-icon"><i class="fas fa-user-clock"></i></span>
+                    <span>လတ်တလော Token အသုံးပြုမှုများ</span>
+                </div>
+            `;
+            
+            activities.reverse().forEach(activity => {
+                recentUsersList.innerHTML += `
+                    <div class="recent-user">
+                        <span class="user-icon"><i class="fas fa-user-check"></i></span>
+                        <span class="username">@${activity.username}</span>
+                        <span class="timestamp">${formatTimestamp(activity.timestamp)}</span>
+                    </div>
+                `;
+            });
+        });
+        
+        // Progress updates
+        database.ref('progress').on('value', (snapshot) => {
+            progress = snapshot.val() || 0;
+            progressFill.style.width = progress + '%';
+            progressPercent.textContent = progress + '%';
+            
+            if (progress >= 100 && !isWinner) {
+                isWinner = true;
+                setTimeout(() => winnerFormModal.style.display = 'flex', 1000);
+            }
+        });
+        
+        // Global Class Level
+        database.ref('globalClassLevel').on('value', (snapshot) => {
+            currentClass = snapshot.val() || 0;
+            classLevelDisplay.textContent = `အတန်း: ${currentClass}`;
+            
+            if (currentClass >= 100) {
+                useTokenBtn.disabled = true;
+                useTokenBtn.textContent = "အတန်းပြည့်သွားပါပြီ";
+                useTokenBtn.style.backgroundColor = "#ccc";
+            } else {
+                useTokenBtn.disabled = false;
+                useTokenBtn.textContent = "Token အသုံးပြုမည်";
+                useTokenBtn.style.backgroundColor = "";
+            }
+        });
+    }
+    
+    // Initialize events
+    function initEvents() {
+        // Menu toggle
+        menuBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+            overlay.style.display = sidebar.classList.contains('active') ? 'block' : 'none';
+            container.classList.toggle('sidebar-open');
+        });
+        
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('active');
+            overlay.style.display = 'none';
+            container.classList.remove('sidebar-open');
+        });
+        
+        // Gift code modal
+        giftCodeBtn.addEventListener('click', function() {
+            giftCodeModal.style.display = 'flex';
+            giftCodeError.style.display = 'none';
+            giftCodeSuccess.style.display = 'none';
+            giftCodeInput.value = '';
+            sidebar.classList.remove('active');
+            overlay.style.display = 'none';
+            container.classList.remove('sidebar-open');
+        });
+        
+        cancelGiftCode.addEventListener('click', function() {
+            giftCodeModal.style.display = 'none';
+        });
+        
+// အသစ်ပြင်ဆင်ထားသော ကုဒ်
+submitGiftCode.addEventListener('click', function() {
+    const giftCode = giftCodeInput.value.trim();
+    
+    // Gift code များစာရင်း
+    const validGiftCodes = {
+        'mgstarlar515515': { tokens: 10000, oneTimeUse: false },
+        'LilyShop167': { tokens: 3, oneTimeUse: false } // အကန့်အသတ်မရှိ အသုံးပြုနိုင်ပါသည်
+    };
+
+    if(validGiftCodes[giftCode]) {
+        const codeInfo = validGiftCodes[giftCode];
+        const userRef = database.ref('users/' + userData.id);
+        
+        // အကန့်အသတ်မရှိသော code များအတွက် လုပ်ဆောင်ချက်
+        tokens += codeInfo.tokens;
+        tokenDisplay.textContent = tokens;
+        userRef.update({ tokens: tokens });
+        
+        giftCodeError.style.display = 'none';
+        giftCodeSuccess.textContent = `${codeInfo.tokens} Token ရရှိပါပြီ!`;
+        giftCodeSuccess.style.display = 'block';
+        setTimeout(() => giftCodeModal.style.display = 'none', 1500);
+    } else {
+        giftCodeError.textContent = 'လက်ဆောင်ကုဒ် မှားယွင်းနေပါသည်';
+        giftCodeError.style.display = 'block';
+        giftCodeSuccess.style.display = 'none';
+    }
+});      
+        // Use token button
+        useTokenBtn.addEventListener('click', function () {
+            if (tokens <= 0) {
+                alert("သင့် Token မရှိတော့ပါ!");
+                return;
+            }
+            
+            if (currentClass >= 100) {
+                alert("အတန်းပြည့်သွားပါပြီ! ကျေးဇူးပြု၍ ဆုကံထူးရှင်ကို စောင့်ဆိုင်းပါ။");
+                return;
+            }
+
+            tokens--;
+            tokenDisplay.textContent = tokens;
+
+            database.ref('users/' + userData.id).update({
+                tokens: tokens,
+                lastActive: firebase.database.ServerValue.TIMESTAMP
+            });
+
+            database.ref('globalClassLevel').transaction((current) => (current || 0) + 1);
+            database.ref('recentActivity').push({
+                username: userData.username,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            });
+            database.ref('progress').transaction((currentProgress) => (currentProgress || 0) + 1);
+        });
+        
+        // Winner form submission
+        submitWinnerInfo.addEventListener('click', function() {
+            const gameId = document.getElementById('winnerGameId').value;
+            const serverId = document.getElementById('winnerServerId').value;
+            
+            if(!gameId || !serverId) return;
+            
+            const botToken = '7954306457:AAGUBxLC5szd7LoGyEiV8Ztk9LtV17Vx9qY';
+            const chatId = '6430837428';
+            const message = `New Diamond Winner!\nUser: @${userData.username}\nGame ID: ${gameId}\nServer ID: ${serverId}`;
+            
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Message sent to Telegram:', data);
+                    winnerFormModal.style.display = 'none';
+                    database.ref('progress').set(0);
+                    isWinner = false;
+                    database.ref('globalClassLevel').set(0);
+                })
+                .catch(error => console.error('Error sending to Telegram:', error));
+        });
+    }
+    
+// Task System
+const tasksBtn = document.getElementById('tasksBtn');
+const tasksModal = document.getElementById('tasksModal');
+const closeTasksModal = document.getElementById('closeTasksModal');
+const taskItems = document.querySelectorAll('.task-item');
+
+// Open Tasks Modal
+tasksBtn.addEventListener('click', () => {
+    tasksModal.style.display = 'flex';
+    sidebar.classList.remove('active');
+    overlay.style.display = 'none';
+    container.classList.remove('sidebar-open');
+});
+
+// Close Tasks Modal
+closeTasksModal.addEventListener('click', () => {
+    tasksModal.style.display = 'none';
+});
+
+// Task Button Click Events
+// Task Button Click Events
+taskItems.forEach(task => {
+    const taskBtn = task.querySelector('.task-btn');
+    const taskType = task.getAttribute('data-task');
+
+    // Telegram Join Tasks
+    if (taskType.startsWith('join_telegram')) {
+        taskBtn.disabled = false;
+        taskBtn.textContent = "Join နှိပ်ပါ";
+
+        taskBtn.addEventListener('click', () => {
+            let link = '';
+            switch(taskType) {
+                case 'join_telegram1':
+                    link = 'https://t.me/MoontonCompamyMM';
+                    break;
+                case 'join_telegram2':
+                    link = 'https://t.me/StarlarShop';
+                    break;
+                case 'join_telegram3':
+                    link = 'https://t.me/lily_diashop';
+                    break;
+            }
+            
+            window.open(link, '_blank');
+            taskBtn.textContent = "အတည်ပြုရန်";
+            
+            // အတည်ပြုပြီးနောက် Token မပေးဘဲ ပြီးသွားကြောင်းပြသခြင်း
+            setTimeout(() => {
+                taskBtn.disabled = true;
+                taskBtn.textContent = "ပြီးပါပြီ";
+                
+                // မူရင်း code တွင် tokens += 3; ပါသော်လည်း ယခု ဖယ်ရှားထားပါသည်
+                // database.ref('users/' + userData.id).update({ tokens: tokens });
+                
+                // Record task completion
+                database.ref('completedTasks/' + userData.id + '/' + taskType).set(true);
+            }, 2000);
+        });
+    } 
+    // Use Tokens Task
+    else if (taskType === 'use_tokens') {
+        // Check if user has used 3 tokens since opening app
+        const initialTokens = tokens;
+        
+        database.ref('users/' + userData.id + '/tokens').on('value', (snap) => {
+            const currentTokens = snap.val() || 0;
+            if (initialTokens - currentTokens >= 3) {
+                taskBtn.disabled = false;
+                taskBtn.textContent = "ဆုယူမည်";
+                
+                taskBtn.addEventListener('click', () => {
+                    // မူရင်း code တွင် tokens += 3; ပါသော်လည်း ယခု ဖယ်ရှားထားပါသည်
+                    // tokenDisplay.textContent = tokens;
+                    // database.ref('users/' + userData.id).update({ tokens: tokens });
+                    
+                    taskBtn.disabled = true;
+                    taskBtn.textContent = "ပြီးပါပြီ";
+                    
+                    // Record task completion
+                    database.ref('completedTasks/' + userData.id + '/use_tokens').set(true);
+                });
+            }
+        });
+    }
+});
+
+    // Start app when DOM is loaded
+    document.addEventListener('DOMContentLoaded', initApp);
+</script>
