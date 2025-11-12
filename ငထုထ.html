@@ -3057,6 +3057,47 @@ body {
       </div>
       <button class="btn" id="btn-channel4">Join & Claim</button>
     </div>
+
+<!-- NEW: Diablo Channel Join Task -->
+<div class="task-item" id="task-diablo">
+  <div class="task-info">
+    <h3>Channel သို့ Join ပါ</h3>
+    <p>https://t.me/diablo9076</p>
+    <div class="task-reward">
+      <img src="https://i.ibb.co/Vcf7pp94/Grid-Art-20251112-131617151.png" alt="Token">
+      <span>3 Token Card</span>
+    </div>
+  </div>
+  <button class="btn" id="btn-diablo">Join & Claim</button>
+</div>
+
+<!-- NEW: POT Diamond Store Channel Join Task -->
+<div class="task-item" id="task-pot">
+  <div class="task-info">
+    <h3>Channel သို့ Join ပါ</h3>
+    <p>https://t.me/POT_DiaStore</p>
+    <div class="task-reward">
+      <img src="https://i.ibb.co/Vcf7pp94/Grid-Art-20251112-131617151.png" alt="Token">
+      <span>3 Token Card</span>
+    </div>
+  </div>
+  <button class="btn" id="btn-pot">Join & Claim</button>
+</div>
+
+<!-- NEW: Starlar Studio Channel Join Task -->
+<div class="task-item" id="task-starlar-studio">
+  <div class="task-info">
+    <h3>Channel သို့ Join ပါ</h3>
+    <p>https://t.me/StarlarStudio</p>
+    <div class="task-reward">
+      <img src="https://i.ibb.co/Vcf7pp94/Grid-Art-20251112-131617151.png" alt="Token">
+      <span>3 Token Card</span>
+    </div>
+  </div>
+  <button class="btn" id="btn-starlar-studio">Join & Claim</button>
+</div>
+    
+    
 <!-- NEW: Max Diamonds Shop Channel Join Task -->
 <div class="task-item" id="task-maxdiamond">
   <div class="task-info">
@@ -3238,7 +3279,7 @@ body {
   <!-- Anime Girl Section (Initially Visible) -->
   <div id="exchange-chat-container">
     <div id="exchange-chat-text"></div>
-    <img id="exchange-chat-icon" src="https://iili.io/KLTfOcx.png" alt="Anime Girl">
+    <img id="exchange-chat-icon" src=" " alt="Anime Girl">
   </div>
 </div>
 
@@ -3448,14 +3489,19 @@ const btnMoonton = document.getElementById('btn-moonton');
 const btnLily = document.getElementById('btn-lily');
 const btnShare10 = document.getElementById('btn-share10');
 const btnMaxdiamond = document.getElementById('btn-maxdiamond'); // ✅ NEW
+// DOM Elements များ
+const btnDiablo = document.getElementById('btn-diablo');
+const btnPot = document.getElementById('btn-pot');
+const btnStarlarStudio = document.getElementById('btn-starlar-studio');
 
+  
 // Game State (အခြား variables တွေနဲ့အတူ)
 let tokens = parseInt(localStorage.getItem('tokens')) || 0;
 let coins = parseInt(localStorage.getItem('coins')) || 0;
 let crystals = parseInt(localStorage.getItem('crystals')) || 0; // ✅ NEW
 let currentExchange = null;
 
-// Task completion state
+// Task completion state ကို update လုပ်ပါ
 let completedTasks = JSON.parse(localStorage.getItem('completedTasks')) || {
   '3hour': false,
   'channel1': false,
@@ -3467,7 +3513,10 @@ let completedTasks = JSON.parse(localStorage.getItem('completedTasks')) || {
   'moonton': false,
   'share10': false,
   'lily': false,
-  'maxdiamond': false // ✅ NEW
+  'maxdiamond': false,
+  'diablo': false,        // ✅ NEW
+  'pot': false,           // ✅ NEW
+  'starlar-studio': false // ✅ NEW
 };
 
   // Timer state
@@ -3534,7 +3583,28 @@ if (completedTasks['maxdiamond']) {
     btnMaxdiamond.disabled = true;
   }
 
+if (completedTasks['diablo']) {
+    document.getElementById('task-diablo').classList.add('task-completed');
+    btnDiablo.textContent = 'လုပ်ပြီးပြီ';
+    btnDiablo.disabled = true;
+  }
 
+  // NEW: POT Diamond Store
+  if (completedTasks['pot']) {
+    document.getElementById('task-pot').classList.add('task-completed');
+    btnPot.textContent = 'လုပ်ပြီးပြီ';
+    btnPot.disabled = true;
+  }
+
+  // NEW: Starlar Studio
+  if (completedTasks['starlar-studio']) {
+    document.getElementById('task-starlar-studio').classList.add('task-completed');
+    btnStarlarStudio.textContent = 'လုပ်ပြီးပြီ';
+    btnStarlarStudio.disabled = true;
+  }
+  
+
+    
     if (completedTasks['channel4']) {
       document.getElementById('task-channel4').classList.add('task-completed');
       btnChannel4.textContent = 'လုပ်ပြီးပြီ';
@@ -3800,6 +3870,69 @@ btnMaxdiamond.addEventListener('click', () => {
       alert('Channel Join ပြီး 5 Token Card ရရှိပါသည်!');
     }, 1000);
   });
+
+// NEW: Diablo Channel Join Task
+btnDiablo.addEventListener('click', () => {
+  if (completedTasks['diablo']) return;
+
+  window.open('https://t.me/diablo9076', '_blank');
+
+  setTimeout(() => {
+    tokens += 3;
+    tokenCountElem.textContent = tokens;
+    completedTasks['diablo'] = true;
+
+    document.getElementById('task-diablo').classList.add('task-completed');
+    btnDiablo.textContent = 'လုပ်ပြီးပြီ';
+    btnDiablo.disabled = true;
+
+    saveGameState();
+    alert('Channel Join ပြီး 3 Token Card ရရှိပါသည်!');
+  }, 1000);
+});
+
+  // NEW: POT Diamond Store Channel Join Task
+btnPot.addEventListener('click', () => {
+  if (completedTasks['pot']) return;
+
+  window.open('https://t.me/POT_DiaStore', '_blank');
+
+  setTimeout(() => {
+    tokens += 3;
+    tokenCountElem.textContent = tokens;
+    completedTasks['pot'] = true;
+
+    document.getElementById('task-pot').classList.add('task-completed');
+    btnPot.textContent = 'လုပ်ပြီးပြီ';
+    btnPot.disabled = true;
+
+    saveGameState();
+    alert('Channel Join ပြီး 3 Token Card ရရှိပါသည်!');
+  }, 1000);
+});
+
+// NEW: Starlar Studio Channel Join Task
+btnStarlarStudio.addEventListener('click', () => {
+  if (completedTasks['starlar-studio']) return;
+
+  window.open('https://t.me/StarlarStudio', '_blank');
+
+  setTimeout(() => {
+    tokens += 3;
+    tokenCountElem.textContent = tokens;
+    completedTasks['starlar-studio'] = true;
+
+    document.getElementById('task-starlar-studio').classList.add('task-completed');
+    btnStarlarStudio.textContent = 'လုပ်ပြီးပြီ';
+    btnStarlarStudio.disabled = true;
+
+    saveGameState();
+    alert('Channel Join ပြီး 3 Token Card ရရှိပါသည်!');
+  }, 1000);
+});
+  
+
+  
 
   // NEW: YouTube Subscribe Task
   btnYoutube.addEventListener('click', () => {
@@ -4592,18 +4725,21 @@ createAccountBtn.addEventListener('click', async function() {
         coins: 0,
         crystals: 0,
         completedTasks: {
-          '3hour': false,
-          'channel1': false,
-          'channel2': false,
-          'channel3': false,
-          'channel4': false,
-          'youtube': false,
-          'share': false,
-          'moonton': false,
-          'share10': false,
-          'lily': false,
-          'maxdiamond': false
-        },
+      '3hour': false,
+      'channel1': false,
+      'channel2': false,
+      'channel3': false,
+      'channel4': false,
+      'youtube': false,
+      'share': false,
+      'moonton': false,
+      'share10': false,
+      'lily': false,
+      'maxdiamond': false,
+      'diablo': false,        // ✅ NEW
+      'pot': false,           // ✅ NEW
+      'starlar-studio': false // ✅ NEW
+  },
         lastTokenTime: 0,
         battleTry: 0,
         lastBattleTime: Date.now(),
