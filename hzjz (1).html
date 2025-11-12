@@ -6747,6 +6747,7 @@ displayServerStatus();
 
 // ===== COMPACT DOWNLOAD SYSTEM WITH DRAG & DROP FIX =====
 
+
 class DownloadManager {
     constructor() {
         this.isDownloading = false;
@@ -6762,7 +6763,7 @@ class DownloadManager {
         this.loadImageList();
         this.checkLocalStorage();
         this.replaceOnlineImagesWithLocal();
-        this.setupDragAndDrop(); // Drag & Drop ထည့်သွင်း
+        this.setupDragAndDrop();
     }
 
     initializeElements() {
@@ -6921,8 +6922,9 @@ class DownloadManager {
     }
 
     loadImageList() {
-        // Define essential background images only (smaller set)
+        // JPG Images Only - No PNG/GIF
         this.downloadQueue = [
+            // Background Images (JPG Only)
             { url: 'https://iili.io/KOZgBK7.jpg', name: 'Login BG' },
             { url: 'https://i.ibb.co/jPSZTK7N/Grid-Art-20251102-171849001.jpg', name: 'Splash BG' },
             { url: 'https://iili.io/KLTH42I.jpg', name: 'Main BG' },
@@ -6930,7 +6932,38 @@ class DownloadManager {
             { url: 'https://i.ibb.co/FLT1LhqQ/f9ace1a0821b26ca96f698d873d697ab.jpg', name: 'Exchange BG' },
             { url: 'https://iili.io/KOZNH0J.jpg', name: 'Rank BG' },
             { url: 'https://i.ibb.co/spwHMt08/Grid-Art-20251023-165052122.jpg', name: 'Game BG' },
-            { url: 'https://i.ibb.co/7d0ZQwSQ/26af0e228da2cdf8b5af4425313603a8.jpg', name: 'Pumpkin BG' }
+            { url: 'https://i.ibb.co/7d0ZQwSQ/26af0e228da2cdf8b5af4425313603a8.jpg', name: 'Pumpkin BG' },
+            { url: 'https://i.ibb.co/VcSpHZt2/Grid-Art-20251112-104128310.jpg', name: 'Main Screen' },
+            { url: 'https://i.ibb.co/sdtSK7r9/Grid-Art-20251112-103216085.jpg', name: 'Event Screen' },
+            { url: 'https://i.ibb.co/0HXNx0D/Grid-Art-20251112-104341468.jpg', name: 'Exchange Screen' },
+            { url: 'https://i.ibb.co/xSpvxSdk/6bad88b1274536d836ea63a329b7fc33.jpg', name: 'Lucky Draw' },
+            { url: 'https://i.ibb.co/ynDJrr2m/Grid-Art-20251112-102809041.jpg', name: 'Token Box' },
+            
+            // Loading/Splash Images (JPG Only)
+            { url: 'https://iili.io/KpGGsAF.jpg', name: 'Loading 1' },
+            { url: 'https://iili.io/KpGVCXa.jpg', name: 'Loading 2' },
+            { url: 'https://iili.io/KpGVD2p.jpg', name: 'Loading 3' },
+            { url: 'https://iili.io/KpGXdAP.jpg', name: 'Loading 4' },
+            { url: 'https://iili.io/KpGXv5B.jpg', name: 'Loading 5' },
+            { url: 'https://iili.io/KpGh1EJ.jpg', name: 'Loading 6' },
+            
+            // Exchange Items (JPG Only)
+            { url: 'https://i.ibb.co/JWN4S2gf/Grid-Art-20251112-174154408.jpg', name: 'Starlight' },
+            { url: 'https://iili.io/KjVZcW7.jpg', name: 'Wp Pass' },
+            { url: 'https://iili.io/KGldYUG.jpg', name: '5 Diamond' },
+            { url: 'https://iili.io/KGlFqle.jpg', name: '11 Diamond' },
+            { url: 'https://iili.io/KGlfSK7.jpg', name: '100 Diamond' },
+            { url: 'https://iili.io/KhdF7sa.jpg', name: 'YUI' },
+            { url: 'https://iili.io/KhdKQGs.jpg', name: 'HSI' },
+            { url: 'https://iili.io/Khdqlgj.jpg', name: 'OPS' },
+            { url: 'https://iili.io/KhdB1Gn.jpg', name: 'PKJ' },
+            { url: 'https://iili.io/KhdC0NV.jpg', name: 'UHF' },
+            { url: 'https://iili.io/Khdo5yx.jpg', name: 'WDS' },
+            { url: 'https://iili.io/KhdzqsS.jpg', name: 'HHS' },
+            { url: 'https://iili.io/KhdIE67.jpg', name: 'OJS' },
+            { url: 'https://iili.io/Khdu9g1.jpg', name: 'KJN' },
+            { url: 'https://iili.io/KhdAd4S.jpg', name: 'PLY' },
+            { url: 'https://iili.io/Khd7Cjs.jpg', name: 'RRE' }
         ];
 
         this.totalImages = this.downloadQueue.length;
@@ -7078,6 +7111,11 @@ class DownloadManager {
                     return response.blob();
                 })
                 .then(blob => {
+                    // Strict JPG validation
+                    if (!blob.type.startsWith('image/jpeg') && !blob.type.startsWith('image/jpg')) {
+                        throw new Error('Not a JPG image');
+                    }
+                    
                     return new Promise((resolve, reject) => {
                         const reader = new FileReader();
                         reader.onload = () => resolve(reader.result);
@@ -7099,7 +7137,7 @@ class DownloadManager {
                             statusElem.textContent = 'ပြီးပြီ ✓';
                             statusElem.style.color = '#90ee90';
                         }
-                        
+
                         if (this.elements.downloadedCount) {
                             this.elements.downloadedCount.textContent = this.downloadedCount;
                         }
@@ -7118,7 +7156,7 @@ class DownloadManager {
                     const listItems = this.elements.downloadList?.querySelectorAll('.download-item');
                     if (listItems && listItems[index]) {
                         const statusElem = listItems[index].querySelector('.download-item-status');
-                        statusElem.textContent = 'မအောင်မြင်';
+                        statusElem.textContent = 'မအောင်မြင် (JPG မဟုတ်)';
                         statusElem.style.color = '#dc3545';
                     }
                     
@@ -7171,7 +7209,7 @@ class DownloadManager {
             } else {
                 storedImages.push(imageData);
             }
-            
+
             localStorage.setItem('downloadedImages', JSON.stringify(storedImages));
             this.updateCacheSize();
             return true;
@@ -7217,6 +7255,18 @@ class DownloadManager {
                     if (storedData) {
                         el.style.backgroundImage = `url("${storedData}")`;
                     }
+                }
+            }
+        });
+
+        // Replace img elements
+        const imgElements = document.querySelectorAll('img');
+        imgElements.forEach(img => {
+            const src = img.src;
+            if (src) {
+                const storedData = this.getStoredImageData(src);
+                if (storedData) {
+                    img.src = storedData;
                 }
             }
         });
@@ -7359,45 +7409,59 @@ class DownloadManager {
 document.addEventListener('DOMContentLoaded', () => {
     window.downloadManager = new DownloadManager();
 });
+        
+
+        
+
+    
+
+        
+                        
+                        
+            
+            
+
+    
+
+    
 
 // Add compact styles with drag improvements
 const compactStyles = `
 .download-indicator {
-    position: fixed;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    z-index: 1000;
-    cursor: grab;
-    user-select: none;
-    touch-action: none;
-}
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  cursor: move;
+  transition: all 0.3s ease;
+  }
 
 .download-indicator:active {
     cursor: grabbing;
 }
 
 .download-button {
-    width: 35px;
-    height: 35px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     background: linear-gradient(135deg, #007bff, #0056b3);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.4);
+    box-shadow: 0 3px 9px rgba(0, 123, 255, 0.4);
     transition: all 0.2s ease;
-    border: 2px solid white;
+    border: 3px solid white;
 }
 
 .download-button:hover {
-    transform: scale(1.05);
-}
+  transform: scale(1.15);
+  box-shadow: 0 8px 25px rgba(0, 123, 255, 0.7);
+  }
 
 .download-button .icon {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>');
     background-size: contain;
 }
@@ -7420,11 +7484,11 @@ const compactStyles = `
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 260px;
+    width: 300px;
     background: rgba(0, 0, 0, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 10px;
-    padding: 15px;
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    padding: 25px;
     color: white;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
     display: none;
@@ -7457,7 +7521,7 @@ const compactStyles = `
 
 .download-header h3 {
     margin: 0;
-    font-size: 14px;
+    font-size: 20px;
     color: #007bff;
     font-weight: bold;
 }
